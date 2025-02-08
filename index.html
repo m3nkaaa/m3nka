@@ -3,54 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Галерея</title>
+    <title>Мозаичная галерея с горизонтальной прокруткой</title>
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
             margin: 0;
-            flex-direction: column;
+            background-color: #f4f4f4;
+            overflow: hidden;  /* Убираем ползунок прокрутки */
         }
+
         .gallery-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 80vh;
+            gap: 10px;
+            flex-wrap: nowrap;
             overflow-x: auto;
-            overflow-y: hidden;
+            width: 100vw;
+            height: 100vh;
             position: relative;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            margin: 0 auto;
+            scroll-snap-type: x mandatory;  /* Для более плавной прокрутки */
+            scroll-behavior: smooth;  /* Плавная прокрутка */
         }
-        .gallery-container::-webkit-scrollbar {
-            display: none;
-        }
-        .gallery-row {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
+
         .gallery-container img {
             width: 100px;
             height: 100px;
             object-fit: cover;
             cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .gallery-container img:hover {
-            transform: scale(1.0);
+            transition: transform 0.3s ease-in-out;
+            position: relative;
         }
 
-        /* Контейнер увеличенного изображения */
+        .gallery-container img:hover {
+            transform: scale(1.1);
+        }
+
         .zoom-container {
             display: none;
             position: fixed;
@@ -58,103 +53,85 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0); /* Полностью прозрачный фон */
+            background-color: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 10;
             opacity: 0;
-            transition: opacity 0.6s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
         }
+
         .zoom-container.show {
             display: flex;
             opacity: 1;
         }
+
         .zoom-container img {
             max-width: 90%;
             max-height: 90%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.1);
-            transition: transform 0.6s ease-in-out;
+            transition: transform 0.3s ease-in-out;
         }
     </style>
 </head>
 <body>
-    <div class="gallery-container" id="galleryContainer" onscroll="loadMoreImages()" onwheel="handleWheel(event)">
-        <div class="gallery-row" id="galleryRow1"></div>
-        <div class="gallery-row" id="galleryRow2"></div>
-    </div>
+    <div class="gallery-container" id="galleryContainer"></div>
 
-    <!-- Контейнер для увеличенного изображения -->
     <div class="zoom-container" id="zoomContainer" onclick="closeZoom(event)">
-        <a id="zoomLink" target="_blank" onclick="event.stopPropagation()"> <!-- Останавливаем распространение события на фон -->
-            <img id="zoomImg">
-        </a>
+        <img id="zoomImg">
     </div>
 
     <script>
         const images = [
-            {
-                src: "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-                link: "https://linktr.ee/m3nka"  // Пример ссылки
-            }
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp"
+            // Добавьте больше картинок по желанию
         ];
 
-        const galleryRow1 = document.getElementById('galleryRow1');
-        const galleryRow2 = document.getElementById('galleryRow2');
+        const galleryContainer = document.getElementById('galleryContainer');
         const zoomContainer = document.getElementById('zoomContainer');
         const zoomImg = document.getElementById('zoomImg');
-        const zoomLink = document.getElementById('zoomLink');
 
-        function populateGallery(row) {
-            for (let i = 0; i < 5; i++) {
-                images.forEach(item => {
-                    const img = document.createElement("img");
-                    img.src = item.src;
-                    img.onclick = () => openZoom(item.src, item.link);  // Передаем ссылку и изображение
-                    row.appendChild(img);
-                });
+        // Функция для случайного расположения изображений в мозаичной галерее
+        function randomizeImages() {
+            for (let i = 0; i < 300; i++) {  // Устанавливаем 300 картинок
+                const img = document.createElement('img');
+                img.src = images[i % images.length]; // Циклично используем картинки
+                img.onclick = () => openZoom(img.src);
+
+                // Случайное позиционирование
+                const randomX = Math.random() * 100;  // Случайное положение по оси X
+                const randomY = Math.random() * 100;  // Случайное положение по оси Y
+                img.style.marginTop = `${randomY}%`;
+                img.style.marginLeft = `${randomX}%`;
+
+                galleryContainer.appendChild(img);
             }
         }
 
-        function openZoom(src, link) {
+        // Открытие увеличенной версии изображения
+        function openZoom(src) {
             zoomImg.src = src;
-            zoomLink.href = link;  // Устанавливаем ссылку для картинки
             zoomContainer.classList.add('show');
-            setTimeout(() => {
-                zoomImg.style.transform = 'translate(-50%, -50%) scale(1)';
-            }, 50);
         }
 
+        // Закрытие увеличенного изображения
         function closeZoom(event) {
             if (event.target === zoomContainer) {
                 zoomContainer.classList.remove('show');
-                zoomImg.style.transform = 'translate(-50%, -50%) scale(0)';
             }
         }
 
-        function loadMoreImages() {
-            const container = document.getElementById("galleryContainer");
-            if (container.scrollHeight - container.scrollTop === container.clientHeight) {
-                populateGallery(galleryRow1);
-                populateGallery(galleryRow2);
-            }
-        }
+        // Инициализация
+        randomizeImages();
 
-        function handleWheel(event) {
-            const galleryContainer = document.getElementById("galleryContainer");
-
-            // Прокручиваем галерею по горизонтали при прокрутке колесика мыши
-            if (event.deltaY !== 0) {
-                event.preventDefault(); // Останавливаем стандартное поведение прокрутки
-                galleryContainer.scrollLeft += event.deltaY; // Прокрутка по оси X
-            }
-        }
-
-        window.onload = function() {
-            populateGallery(galleryRow1);
-            populateGallery(galleryRow2);
+        // Устанавливаем прокрутку на центр после загрузки
+        window.onload = () => {
+            const galleryWidth = galleryContainer.scrollWidth;
+            const containerWidth = galleryContainer.clientWidth;
+            galleryContainer.scrollLeft = (galleryWidth - containerWidth) / 2;
         };
     </script>
 </body>
