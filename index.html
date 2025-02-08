@@ -58,7 +58,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0); /* Затемнение фона */
+            background-color: rgba(0, 0, 0, 0); /* Полностью прозрачный фон */
             justify-content: center;
             align-items: center;
             z-index: 10;
@@ -78,49 +78,6 @@
             transform: translate(-50%, -50%) scale(0.1);
             transition: transform 0.6s ease-in-out;
         }
-
-        /* Контейнер модального окна с кнопками */
-        .modal-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: transparent;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
-            transform: translateY(-3%); /* Поднимаем окно на 5% */
-        }
-        .modal-container.show {
-            display: flex;
-            opacity: 1;
-        }
-        .modal-content {
-            background-color: transparent;
-            padding: 20px;
-            text-align: center;
-            border-radius: 0px;
-            box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-        }
-        .modal-content button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            background-color: transparent;
-            color: white;
-            border: 0px solid #007bff;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .modal-content button:hover {
-            background-color: transparent;
-            color: black;
-        }
     </style>
 </head>
 <body>
@@ -131,23 +88,16 @@
 
     <!-- Контейнер для увеличенного изображения -->
     <div class="zoom-container" id="zoomContainer" onclick="closeZoom(event)">
-        <img id="zoomImg" onclick="event.stopPropagation()"> <!-- Останавливаем распространение события на фон -->
-    </div>
-
-    <!-- Контейнер модального окна с кнопками -->
-    <div class="modal-container" id="modalContainer" onclick="closeModal(event)">
-        <div class="modal-content">
-            <button onclick="window.location.href='https://linktr.ee/m3nka';">Ссылка 1</button>
-            <button onclick="window.location.href='https://linktr.ee/m3nka';">Ссылка 2</button>
-            <button onclick="window.location.href='https://linktr.ee/m3nka';">Ссылка 3</button>
-        </div>
+        <a id="zoomLink" target="_blank" onclick="event.stopPropagation()"> <!-- Останавливаем распространение события на фон -->
+            <img id="zoomImg">
+        </a>
     </div>
 
     <script>
         const images = [
             {
                 src: "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-                link: "https://linktr.ee/m3nka"
+                link: "https://linktr.ee/m3nka"  // Пример ссылки
             }
         ];
 
@@ -155,21 +105,22 @@
         const galleryRow2 = document.getElementById('galleryRow2');
         const zoomContainer = document.getElementById('zoomContainer');
         const zoomImg = document.getElementById('zoomImg');
-        const modalContainer = document.getElementById('modalContainer');
+        const zoomLink = document.getElementById('zoomLink');
 
         function populateGallery(row) {
             for (let i = 0; i < 5; i++) {
                 images.forEach(item => {
                     const img = document.createElement("img");
                     img.src = item.src;
-                    img.onclick = () => openZoom(item.src);  // При клике открываем увеличенное изображение
+                    img.onclick = () => openZoom(item.src, item.link);  // Передаем ссылку и изображение
                     row.appendChild(img);
                 });
             }
         }
 
-        function openZoom(src) {
+        function openZoom(src, link) {
             zoomImg.src = src;
+            zoomLink.href = link;  // Устанавливаем ссылку для картинки
             zoomContainer.classList.add('show');
             setTimeout(() => {
                 zoomImg.style.transform = 'translate(-50%, -50%) scale(1)';
@@ -183,85 +134,27 @@
             }
         }
 
-        function openModal() {
-            modalContainer.classList.add('show');
-        }
-
-        function closeModal(event) {
-            if (event.target === modalContainer) {
-                modalContainer.classList.remove('show');
-            }
-        }
-
         function loadMoreImages() {
             const container = document.getElementById("galleryContainer");
-            const containerWidth = container.scrollWidth;
-            const containerScrollLeft = container.scrollLeft;
-            const containerClientWidth = container.clientWidth;
-
-            if (containerScrollLeft <= 0) {
-                // Переместить в конец и добавить новые изображения
-                container.scrollLeft = containerWidth - containerClientWidth;
-                populateGallery(galleryRow1);
-                populateGallery(galleryRow2);
-            } else if (containerScrollLeft + containerClientWidth >= containerWidth) {
-                // Переместить в начало и добавить новые изображения
-                container.scrollLeft = 0;
+            if (container.scrollHeight - container.scrollTop === container.clientHeight) {
                 populateGallery(galleryRow1);
                 populateGallery(galleryRow2);
             }
-        }
-
-        let isScrolling = false;
-
-        function smoothScrollTo(target) {
-            if (isScrolling) return;
-            isScrolling = true;
-
-            const container = document.getElementById("galleryContainer");
-            const startScrollLeft = container.scrollLeft;
-            const scrollDistance = target - startScrollLeft;
-            const duration = 600; // Время прокрутки в миллисекундах
-            let startTime = null;
-
-            function scrollAnimation(currentTime) {
-                if (!startTime) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const scrollAmount = easeOutQuad(timeElapsed, startScrollLeft, scrollDistance, duration);
-                container.scrollLeft = scrollAmount;
-
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(scrollAnimation);
-                } else {
-                    isScrolling = false;
-                }
-            }
-
-            function easeOutQuad(t, b, c, d) {
-                const ts = (t/=d)*t;
-                return b+c*(ts + -2*t + 1);
-            }
-
-            requestAnimationFrame(scrollAnimation);
         }
 
         function handleWheel(event) {
             const galleryContainer = document.getElementById("galleryContainer");
 
+            // Прокручиваем галерею по горизонтали при прокрутке колесика мыши
             if (event.deltaY !== 0) {
                 event.preventDefault(); // Останавливаем стандартное поведение прокрутки
-                smoothScrollTo(galleryContainer.scrollLeft + event.deltaY);
+                galleryContainer.scrollLeft += event.deltaY; // Прокрутка по оси X
             }
         }
 
         window.onload = function() {
             populateGallery(galleryRow1);
             populateGallery(galleryRow2);
-
-            // Устанавливаем прокрутку на середину контейнера
-            const container = document.getElementById("galleryContainer");
-            const middleScrollPosition = container.scrollWidth / 2 - container.clientWidth / 2;
-            container.scrollLeft = middleScrollPosition;
         };
     </script>
 </body>
