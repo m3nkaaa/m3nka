@@ -23,18 +23,18 @@
 
         .gallery-container {
             display: flex;
-            gap: 10px;
+            gap: 2px; /* Промежутки между изображениями */
             flex-wrap: nowrap;
             overflow-x: auto;
             width: 100vw;
-            height: 100vh;
+            height: 800px;  /* Устанавливаем фиксированную высоту экрана */
             position: relative;
             scroll-snap-type: x mandatory;  /* Для более плавной прокрутки */
             scroll-behavior: smooth;  /* Плавная прокрутка */
         }
 
         .gallery-container img {
-            width: 100px;
+            width: 100px; /* Размер картинок */
             height: 100px;
             object-fit: cover;
             cursor: pointer;
@@ -96,15 +96,18 @@
 
         // Функция для случайного расположения изображений в мозаичной галерее
         function randomizeImages() {
-            for (let i = 0; i < 300; i++) {  // Устанавливаем 300 картинок
+            const containerHeight = 800; // Высота экрана (фиксированное значение)
+            const numOfImages = 300; // Количество картинок
+
+            for (let i = 0; i < numOfImages; i++) {
                 const img = document.createElement('img');
                 img.src = images[i % images.length]; // Циклично используем картинки
                 img.onclick = () => openZoom(img.src);
 
                 // Случайное позиционирование
-                const randomX = Math.random() * 100;  // Случайное положение по оси X
-                const randomY = Math.random() * 100;  // Случайное положение по оси Y
-                img.style.marginTop = `${randomY}%`;
+                const randomX = Math.random() * 20;  // Отступ по оси X
+                const randomY = Math.random() * containerHeight;  // Отступ по оси Y (занимает всю высоту экрана)
+                img.style.marginTop = `${randomY}px`;
                 img.style.marginLeft = `${randomX}%`;
 
                 galleryContainer.appendChild(img);
