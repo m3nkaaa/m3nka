@@ -24,13 +24,12 @@
             justify-content: center;
             width: 100%;
             height: 80vh;
-            overflow-x: hidden;
+            overflow-x: auto;
             overflow-y: hidden;
             position: relative;
             -ms-overflow-style: none;
             scrollbar-width: none;
             margin: 0 auto;
-            cursor: grab;
         }
         .gallery-container::-webkit-scrollbar {
             display: none;
@@ -66,12 +65,10 @@
             opacity: 0;
             transition: opacity 0.6s ease-in-out;
         }
-
         .zoom-container.show {
             display: flex;
             opacity: 1;
         }
-
         .zoom-container img {
             max-width: 90%;
             max-height: 90%;
@@ -98,12 +95,10 @@
             transition: opacity 0.6s ease-in-out;
             transform: translateY(-3%); /* Поднимаем окно на 5% */
         }
-
         .modal-container.show {
             display: flex;
             opacity: 1;
         }
-
         .modal-content {
             background-color: transparent;
             padding: 20px;
@@ -111,7 +106,6 @@
             border-radius: 0px;
             box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
         }
-
         .modal-content button {
             display: block;
             margin: 10px auto;
@@ -123,7 +117,6 @@
             cursor: pointer;
             text-decoration: none;
         }
-
         .modal-content button:hover {
             background-color: transparent;
             color: black;
@@ -131,7 +124,7 @@
     </style>
 </head>
 <body>
-    <div class="gallery-container" id="galleryContainer" onscroll="loadMoreImages()">
+    <div class="gallery-container" id="galleryContainer" onscroll="loadMoreImages()" onwheel="handleWheel(event)">
         <div class="gallery-row" id="galleryRow1"></div>
         <div class="gallery-row" id="galleryRow2"></div>
     </div>
@@ -208,37 +201,47 @@
             }
         }
 
-        // Плавная прокрутка по горизонтали при свайпе
-        let isMouseDown = false;
-        let startX;
-        let scrollLeft;
+        let isScrolling = false;
 
-        const galleryContainer = document.getElementById("galleryContainer");
+        function smoothScrollTo(target) {
+            if (isScrolling) return;
+            isScrolling = true;
 
-        galleryContainer.addEventListener('mousedown', (e) => {
-            isMouseDown = true;
-            startX = e.pageX - galleryContainer.offsetLeft;
-            scrollLeft = galleryContainer.scrollLeft;
-            galleryContainer.style.cursor = 'grabbing';
-        });
+            const container = document.getElementById("galleryContainer");
+            const startScrollLeft = container.scrollLeft;
+            const scrollDistance = target - startScrollLeft;
+            const duration = 600; // Время прокрутки в миллисекундах
+            let startTime = null;
 
-        galleryContainer.addEventListener('mouseleave', () => {
-            isMouseDown = false;
-            galleryContainer.style.cursor = 'grab';
-        });
+            function scrollAnimation(currentTime) {
+                if (!startTime) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const scrollAmount = easeOutQuad(timeElapsed, startScrollLeft, scrollDistance, duration);
+                container.scrollLeft = scrollAmount;
 
-        galleryContainer.addEventListener('mouseup', () => {
-            isMouseDown = false;
-            galleryContainer.style.cursor = 'grab';
-        });
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(scrollAnimation);
+                } else {
+                    isScrolling = false;
+                }
+            }
 
-        galleryContainer.addEventListener('mousemove', (e) => {
-            if (!isMouseDown) return;
-            e.preventDefault();
-            const x = e.pageX - galleryContainer.offsetLeft;
-            const walk = (x - startX) * 2; // Увеличиваем скорость прокрутки
-            galleryContainer.scrollLeft = scrollLeft - walk;
-        });
+            function easeOutQuad(t, b, c, d) {
+                const ts = (t/=d)*t;
+                return b+c*(ts + -2*t + 1);
+            }
+
+            requestAnimationFrame(scrollAnimation);
+        }
+
+        function handleWheel(event) {
+            const galleryContainer = document.getElementById("galleryContainer");
+
+            if (event.deltaY !== 0) {
+                event.preventDefault(); // Останавливаем стандартное поведение прокрутки
+                smoothScrollTo(galleryContainer.scrollLeft + event.deltaY);
+            }
+        }
 
         window.onload = function() {
             populateGallery(galleryRow1);
