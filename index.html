@@ -195,7 +195,18 @@
 
         function loadMoreImages() {
             const container = document.getElementById("galleryContainer");
-            if (container.scrollHeight - container.scrollTop === container.clientHeight) {
+            const containerWidth = container.scrollWidth;
+            const containerScrollLeft = container.scrollLeft;
+            const containerClientWidth = container.clientWidth;
+
+            if (containerScrollLeft <= 0) {
+                // Переместить в конец и добавить новые изображения
+                container.scrollLeft = containerWidth - containerClientWidth;
+                populateGallery(galleryRow1);
+                populateGallery(galleryRow2);
+            } else if (containerScrollLeft + containerClientWidth >= containerWidth) {
+                // Переместить в начало и добавить новые изображения
+                container.scrollLeft = 0;
                 populateGallery(galleryRow1);
                 populateGallery(galleryRow2);
             }
@@ -246,11 +257,11 @@
         window.onload = function() {
             populateGallery(galleryRow1);
             populateGallery(galleryRow2);
-        };
 
-        // Открываем модальное окно с кнопками при клике на увеличенное изображение
-        zoomImg.onclick = function() {
-            openModal();
+            // Устанавливаем прокрутку на середину контейнера
+            const container = document.getElementById("galleryContainer");
+            const middleScrollPosition = container.scrollWidth / 2 - container.clientWidth / 2;
+            container.scrollLeft = middleScrollPosition;
         };
     </script>
 </body>
