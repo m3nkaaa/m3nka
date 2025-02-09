@@ -27,12 +27,13 @@
             flex-wrap: wrap;
             gap: 2px;
             justify-content: flex-start;
-            width: 100vw;
-            height: 100vh;
+            width: 60vw; /* Ограничиваем ширину галереи 60% от ширины экрана */
+            height: 60vh; /* Ограничиваем высоту галереи 60% от высоты экрана */
             overflow: auto;
             position: relative;
             scroll-snap-type: both mandatory;
             scroll-behavior: smooth;
+            margin: auto; /* Центрируем галерею */
         }
 
         .gallery-container img {
@@ -49,11 +50,11 @@
 
         .social-icons {
             position: fixed;
-            top: 10px;
+            top: 30px; /* Отступ 30px от верхнего края */
             right: 10px;
             display: flex;
             gap: 10px;
-            opacity: 0.7;
+            opacity: 1;
             z-index: 1;
             flex-direction: column;
         }
@@ -71,7 +72,7 @@
 
         @media (max-width: 768px) {
             .social-icons {
-                top: 10px;
+                top: 30px; /* Отступ 30px от верхнего края */
                 right: 5px;
                 flex-direction: row;
                 gap: 8px;
@@ -85,7 +86,7 @@
 
         @media (max-width: 480px) {
             .social-icons {
-                top: 10px;
+                top: 30px; /* Отступ 30px от верхнего края */
                 right: 5px;
                 flex-direction: row;
                 gap: 5px;
@@ -147,7 +148,6 @@
     <script>
         const images = [
             { thumbnail: "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp", gif: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjAzcmxpMGlpNXFrMjVlNnVienExYzJhdTl6NDR4bGhxZzd0amZiZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tHIRLHtNwxpjIFqPdV/giphy.gif" },
-           
         ];
 
         const galleryContainer = document.getElementById('galleryContainer');
