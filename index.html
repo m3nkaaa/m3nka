@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мозаичная галерея с горизонтальной прокруткой</title>
+    <title>Мозаичная галерея с увеличением изображений</title>
     <style>
         * {
             box-sizing: border-box;
@@ -18,24 +18,25 @@
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
-            overflow: hidden;  /* Убираем ползунок прокрутки */
+            overflow: hidden;
             position: relative;
         }
 
         .gallery-container {
             display: flex;
-            gap: 2px; /* Промежутки между изображениями */
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            width: 100vw;
-            height: 800px;  /* Устанавливаем фиксированную высоту экрана */
+            flex-wrap: wrap; /* Изменено для вертикального расположения */
+            gap: 2px;
+            justify-content: center; /* Центрирование изображений */
+            width: 100vw; /* Ширина контейнера по ширине экрана */
+            height: 800px;
+            overflow-y: auto; /* Разрешена вертикальная прокрутка */
             position: relative;
-            scroll-snap-type: x mandatory;  /* Для более плавной прокрутки */
-            scroll-behavior: smooth;  /* Плавная прокрутка */
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
         }
 
         .gallery-container img {
-            width: 100px; /* Размер картинок */
+            width: 100px;
             height: 100px;
             object-fit: cover;
             cursor: pointer;
@@ -46,26 +47,55 @@
             transform: scale(1.1);
         }
 
-
         .social-icons {
-            position: absolute;
+            position: fixed;
             top: 10px;
             right: 10px;
             display: flex;
-            gap: 5px;
+            gap: 10px;
             opacity: 0.7;
             z-index: 1;
+            flex-direction: column;
         }
 
         .social-icons a img {
-            width: 20px;  /* Размер значков */
-            height: 20px;
+            width: 25px;
+            height: 25px;
             filter: grayscale(100%) contrast(100%) brightness(100%);
             transition: filter 0.3s ease-in-out;
         }
 
         .social-icons a img:hover {
             filter: grayscale(0%) contrast(200%) brightness(120%);
+        }
+
+        /* Медиазапросы для адаптивности */
+        @media (max-width: 768px) {
+            .social-icons {
+                top: 10px;
+                right: 5px;
+                flex-direction: row;
+                gap: 8px;
+            }
+
+            .social-icons a img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .social-icons {
+                top: 10px;
+                right: 5px;
+                flex-direction: row;
+                gap: 5px;
+            }
+
+            .social-icons a img {
+                width: 18px;
+                height: 18px;
+            }
         }
 
         .zoom-container {
@@ -75,7 +105,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.7);
             justify-content: center;
             align-items: center;
             z-index: 10;
@@ -91,7 +121,12 @@
         .zoom-container img {
             max-width: 90%;
             max-height: 90%;
-            transition: transform 0.3s ease-in-out;
+            transform: scale(0); /* Изначально уменьшенное изображение */
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .zoom-container.show img {
+            transform: scale(1); /* Увеличение при показе */
         }
     </style>
 </head>
@@ -102,7 +137,6 @@
         <img id="zoomImg">
     </div>
 
-    <!-- Контейнер для значков социальных сетей -->
     <div class="social-icons">
         <a href="https://yourshop.com" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/shop.png" alt="Магазин"></a>
         <a href="https://instagram.com" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/instagram-new.png" alt="Instagram"></a>
@@ -114,11 +148,11 @@
     <script>
         const images = [
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
@@ -130,42 +164,38 @@
         const zoomImg = document.getElementById('zoomImg');
 
         // Функция для более упорядоченного случайного позиционирования изображений
-function randomizeImages() {
-    const containerHeight = 800; // Высота экрана (фиксированное значение)
-    const numOfImages = images.length; // Количество картинок (зависит от длины массива)
-    const containerWidth = galleryContainer.offsetWidth; // Ширина контейнера
+        function randomizeImages() {
+            const containerWidth = galleryContainer.offsetWidth; // Ширина контейнера
+            const numOfImages = images.length; // Количество картинок
 
-    for (let i = 0; i < numOfImages; i++) {
-        const img = document.createElement('img');
-        img.src = images[i % images.length]; // Циклично используем картинки
-        img.onclick = () => openZoom(img.src);
+            for (let i = 0; i < numOfImages; i++) {
+                const img = document.createElement('img');
+                img.src = images[i % images.length]; // Циклично используем картинки
+                img.onclick = () => openZoom(img.src);
 
-        // Генерация случайного, но ограниченного положения
-        const randomX = Math.random() * (containerWidth - 100); // Отступ по оси X с ограничением по ширине
-        const randomY = Math.random() * (containerHeight - 100); // Отступ по оси Y с ограничением по высоте
+                const randomY = Math.random() * (galleryContainer.offsetHeight - 100); // Отступ по оси Y
+                img.style.marginTop = `${randomY}px`;
 
-        // Позиционирование с добавлением случайных значений
-        img.style.position = 'absolute';
-        img.style.left = `${randomX}px`;
-        img.style.top = `${randomY}px`;
+                galleryContainer.appendChild(img);
+            }
+        }
 
-        galleryContainer.appendChild(img);
-    }
-}
-
-// Инициализация
-randomizeImages();  // Вызываем функцию для случайного позиционирования картинок
-
-        // Открытие увеличенной версии изображения
+        // Открытие увеличенного изображения с анимацией
         function openZoom(src) {
             zoomImg.src = src;
-            zoomContainer.classList.add('show');
+
+            // Добавляем задержку для плавности анимации при первом открытии
+            setTimeout(() => {
+                zoomContainer.classList.add('show');
+                setTimeout(() => zoomImg.style.transform = 'scale(1)', 50); // Плавное увеличение после отображения
+            }, 50); // Задержка перед открытием
         }
 
         // Закрытие увеличенного изображения
         function closeZoom(event) {
             if (event.target === zoomContainer) {
-                zoomContainer.classList.remove('show');
+                zoomImg.style.transform = 'scale(0)'; // Плавное уменьшение
+                setTimeout(() => zoomContainer.classList.remove('show'), 500); // Закрыть контейнер после анимации
             }
         }
 
@@ -176,7 +206,7 @@ randomizeImages();  // Вызываем функцию для случайног
         window.onload = () => {
             const galleryWidth = galleryContainer.scrollWidth;
             const containerWidth = galleryContainer.clientWidth;
-            galleryContainer.scrollLeft = (galleryWidth - containerWidth) / 2;
+            galleryContainer.scrollTop = (galleryWidth - containerWidth) / 2;
         };
     </script>
 </body>
