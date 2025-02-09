@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мозаичная галерея с увеличением изображений</title>
+    <title>m3nka</title>
     <style>
         * {
             box-sizing: border-box;
@@ -24,19 +24,19 @@
 
         .gallery-container {
             display: flex;
-            flex-wrap: wrap; /* Разрешаем оборачивание изображений */
+            flex-wrap: wrap;
             gap: 2px;
-            justify-content: flex-start; /* Изображения выравниваются по левому краю */
-            width: 100vw; /* Контейнер растягивается по ширине экрана */
-            height: 100vh; /* Контейнер растягивается по высоте экрана */
-            overflow: auto; /* Разрешаем прокрутку по обеим осям */
+            justify-content: flex-start;
+            width: 100vw;
+            height: 100vh;
+            overflow: auto;
             position: relative;
-            scroll-snap-type: both mandatory; /* Прокрутка по обеим осям */
+            scroll-snap-type: both mandatory;
             scroll-behavior: smooth;
         }
 
         .gallery-container img {
-            width: 100px; /* Увеличена ширина изображений */
+            width: 100px;
             height: 100px;
             object-fit: cover;
             cursor: pointer;
@@ -69,7 +69,6 @@
             filter: grayscale(0%) contrast(200%) brightness(120%);
         }
 
-        /* Медиазапросы для адаптивности */
         @media (max-width: 768px) {
             .social-icons {
                 top: 10px;
@@ -121,12 +120,12 @@
         .zoom-container img {
             max-width: 90%;
             max-height: 90%;
-            transform: scale(0); /* Изначально уменьшенное изображение */
+            transform: scale(0);
             transition: transform 0.5s ease-in-out;
         }
 
         .zoom-container.show img {
-            transform: scale(1); /* Увеличение при показе */
+            transform: scale(1);
         }
     </style>
 </head>
@@ -134,7 +133,7 @@
     <div class="gallery-container" id="galleryContainer"></div>
 
     <div class="zoom-container" id="zoomContainer" onclick="closeZoom(event)">
-        <img id="zoomImg">
+        <img id="zoomImg" src="">
     </div>
 
     <div class="social-icons">
@@ -147,7 +146,9 @@
 
     <script>
         const images = [
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp"        ];
+            { thumbnail: "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp", gif: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjAzcmxpMGlpNXFrMjVlNnVienExYzJhdTl6NDR4bGhxZzd0amZiZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tHIRLHtNwxpjIFqPdV/giphy.gif" },
+           
+        ];
 
         const galleryContainer = document.getElementById('galleryContainer');
         const zoomContainer = document.getElementById('zoomContainer');
@@ -160,8 +161,8 @@
 
             for (let i = 0; i < numOfImages; i++) {
                 const img = document.createElement('img');
-                img.src = images[i % images.length]; // Циклично используем картинки
-                img.onclick = () => openZoom(img.src);
+                img.src = images[i].thumbnail; // Миниатюра изображения
+                img.onclick = () => openZoom(images[i].gif); // При клике открывается соответствующий GIF
 
                 const randomY = Math.random() * (galleryContainer.offsetHeight - 100); // Отступ по оси Y
                 const randomX = Math.random() * (galleryContainer.offsetWidth - 100); // Отступ по оси X
@@ -172,7 +173,7 @@
             }
         }
 
-        // Открытие увеличенного изображения с анимацией
+        // Открытие увеличенного GIF с анимацией
         function openZoom(src) {
             zoomImg.src = src;
 
