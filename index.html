@@ -24,19 +24,19 @@
 
         .gallery-container {
             display: flex;
-            flex-wrap: wrap; /* Изменено для вертикального расположения */
+            flex-wrap: wrap; /* Разрешаем оборачивание изображений */
             gap: 2px;
-            justify-content: center; /* Центрирование изображений */
-            width: 100vw; /* Ширина контейнера по ширине экрана */
-            height: 800px;
-            overflow-y: auto; /* Разрешена вертикальная прокрутка */
+            justify-content: flex-start; /* Изображения выравниваются по левому краю */
+            width: 100vw; /* Контейнер растягивается по ширине экрана */
+            height: 100vh; /* Контейнер растягивается по высоте экрана */
+            overflow: auto; /* Разрешаем прокрутку по обеим осям */
             position: relative;
-            scroll-snap-type: y mandatory;
+            scroll-snap-type: both mandatory; /* Прокрутка по обеим осям */
             scroll-behavior: smooth;
         }
 
         .gallery-container img {
-            width: 100px;
+            width: 100px; /* Увеличена ширина изображений */
             height: 100px;
             object-fit: cover;
             cursor: pointer;
@@ -147,17 +147,7 @@
 
     <script>
         const images = [
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp"
-        ];
+            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp"        ];
 
         const galleryContainer = document.getElementById('galleryContainer');
         const zoomContainer = document.getElementById('zoomContainer');
@@ -174,7 +164,9 @@
                 img.onclick = () => openZoom(img.src);
 
                 const randomY = Math.random() * (galleryContainer.offsetHeight - 100); // Отступ по оси Y
+                const randomX = Math.random() * (galleryContainer.offsetWidth - 100); // Отступ по оси X
                 img.style.marginTop = `${randomY}px`;
+                img.style.marginLeft = `${randomX}px`;
 
                 galleryContainer.appendChild(img);
             }
@@ -201,13 +193,6 @@
 
         // Инициализация
         randomizeImages();
-
-        // Устанавливаем прокрутку на центр после загрузки
-        window.onload = () => {
-            const galleryWidth = galleryContainer.scrollWidth;
-            const containerWidth = galleryContainer.clientWidth;
-            galleryContainer.scrollTop = (galleryWidth - containerWidth) / 2;
-        };
     </script>
 </body>
 </html>
