@@ -19,6 +19,7 @@
             margin: 0;
             background-color: #f4f4f4;
             overflow: hidden;  /* Убираем ползунок прокрутки */
+            position: relative;
         }
 
         .gallery-container {
@@ -39,11 +40,32 @@
             object-fit: cover;
             cursor: pointer;
             transition: transform 0.3s ease-in-out;
-            position: relative;
         }
 
         .gallery-container img:hover {
             transform: scale(1.1);
+        }
+
+
+        .social-icons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        .social-icons a img {
+            width: 20px;  /* Размер значков */
+            height: 20px;
+            filter: grayscale(100%) contrast(100%) brightness(100%);
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .social-icons a img:hover {
+            filter: grayscale(0%) contrast(200%) brightness(120%);
         }
 
         .zoom-container {
@@ -53,7 +75,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0);
             justify-content: center;
             align-items: center;
             z-index: 10;
@@ -80,66 +102,59 @@
         <img id="zoomImg">
     </div>
 
+    <!-- Контейнер для значков социальных сетей -->
+    <div class="social-icons">
+        <a href="https://yourshop.com" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/shop.png" alt="Магазин"></a>
+        <a href="https://instagram.com" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/instagram-new.png" alt="Instagram"></a>
+        <a href="https://tiktok.com" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/tiktok.png" alt="TikTok"></a>
+        <a href="https://twitch.tv" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/twitch.png" alt="Twitch"></a>
+        <a href="https://t.me" target="_blank"><img src="https://img.icons8.com/ios-filled/20/000000/telegram-app.png" alt="Telegram"></a>
+    </div>
+
     <script>
         const images = [
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
-            "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
+"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp",
             "https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp"
-            
-            // Добавьте еще больше картинок, если нужно
         ];
 
         const galleryContainer = document.getElementById('galleryContainer');
         const zoomContainer = document.getElementById('zoomContainer');
         const zoomImg = document.getElementById('zoomImg');
 
-        // Функция для случайного расположения изображений в мозаичной галерее
-        function randomizeImages() {
-            const containerHeight = 800; // Высота экрана (фиксированное значение)
-            const numOfImages = images.length; // Количество картинок (зависит от длины массива)
+        // Функция для более упорядоченного случайного позиционирования изображений
+function randomizeImages() {
+    const containerHeight = 800; // Высота экрана (фиксированное значение)
+    const numOfImages = images.length; // Количество картинок (зависит от длины массива)
+    const containerWidth = galleryContainer.offsetWidth; // Ширина контейнера
 
-            for (let i = 0; i < numOfImages; i++) {
-                const img = document.createElement('img');
-                img.src = images[i % images.length]; // Циклично используем картинки
-                img.onclick = () => openZoom(img.src);
+    for (let i = 0; i < numOfImages; i++) {
+        const img = document.createElement('img');
+        img.src = images[i % images.length]; // Циклично используем картинки
+        img.onclick = () => openZoom(img.src);
 
-                // Случайное позиционирование
-                const randomX = Math.random() * 20;  // Отступ по оси X
-                const randomY = Math.random() * containerHeight;  // Отступ по оси Y (занимает всю высоту экрана)
-                img.style.marginTop = `${randomY}px`;
-                img.style.marginLeft = `${randomX}%`;
+        // Генерация случайного, но ограниченного положения
+        const randomX = Math.random() * (containerWidth - 100); // Отступ по оси X с ограничением по ширине
+        const randomY = Math.random() * (containerHeight - 100); // Отступ по оси Y с ограничением по высоте
 
-                galleryContainer.appendChild(img);
-            }
-        }
+        // Позиционирование с добавлением случайных значений
+        img.style.position = 'absolute';
+        img.style.left = `${randomX}px`;
+        img.style.top = `${randomY}px`;
+
+        galleryContainer.appendChild(img);
+    }
+}
+
+// Инициализация
+randomizeImages();  // Вызываем функцию для случайного позиционирования картинок
 
         // Открытие увеличенной версии изображения
         function openZoom(src) {
