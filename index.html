@@ -26,27 +26,36 @@
         }
 
         .gallery-container {
-            width: 100%;
-            height: 100%;
+            width: auto;
+            max-width: 800px;
+            height: auto;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             position: relative;
             overflow: visible;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            position: relative;
+            text-align: center;
+            
         }
 
         .gallery-container img {
-            width: 100%;
+            width: 85%;
             height: 100%;
             object-fit: contain;
+            
         }
 
         .countdown-wrapper {
-            position: absolute;
-            bottom: 10px; /* Позиционируем таймер внизу */
-            right: 10px; /* Позиционируем таймер справа */
+            margin-top: 20px; /* Таймер будет находиться под картинкой */
             display: flex;
-            align-items: center;
+            justify-content: center;
             font-size: 24px;
             font-weight: bold;
             color: black;
@@ -55,14 +64,14 @@
         }
 
         .countdown-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             color: black;
             margin-right: 10px;
         }
 
         .countdown {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             color: black;
         }
@@ -116,15 +125,15 @@
 
         @media (max-width: 768px) {
             .countdown-text {
-                font-size: 16px;
+                font-size: 18px;
             }
 
             .countdown {
-                font-size: 20px;
+                font-size: 15px;
             }
 
             .social-icons {
-                gap: 8px;
+                gap: 10px;
             }
 
             .social-icons a img {
@@ -139,7 +148,7 @@
             }
 
             .countdown {
-                font-size: 18px;
+                font-size: 15px;
             }
 
             .social-icons {
@@ -155,15 +164,16 @@
 </head>
 <body>
     <div class="gallery-container">
-        <img src="https://i.postimg.cc/2y9NxdzJ/DALL-E-2025-02-10-17-31-04-A-three-panel-black-and-white-manga-style-comic-strip-The-first-panel.webp" alt="Фоновое изображение">
-        <!-- Таймер теперь будет под картинкой справа -->
+        <div class="image-wrapper">
+            <img src="https://i.postimg.cc/2y9NxdzJ/DALL-E-2025-02-10-17-31-04-A-three-panel-black-and-white-manga-style-comic-strip-The-first-panel.webp" alt="Фоновое изображение">
+        </div>
+        <!-- Таймер теперь расположен под картинкой -->
         <div class="countdown-wrapper">
             <div class="countdown-text">Continues in</div>
             <div class="countdown" id="countdown">00:00:00</div>
         </div>
     </div>
 
-    <!-- Социальные иконки -->
     <div class="social-icons">
         <a href="javascript:void(0);" onclick="showComingSoon(event)">
             <img src="https://img.icons8.com/?size=100&id=19411&format=png&color=000000" alt="Магазин">
