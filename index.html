@@ -21,11 +21,13 @@
             background-color: #f4f4f4;
             overflow: hidden;
             position: relative;
+            padding-bottom: 100px;
+            padding-top: 100px;
         }
 
         .gallery-container {
             width: 100%;
-            height: auto;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,15 +37,14 @@
 
         .gallery-container img {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: contain;
         }
 
         .countdown-wrapper {
             position: absolute;
-            bottom: -30px; /* Помещаем таймер сразу под картинку */
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 10px; /* Позиционируем таймер внизу */
+            right: 10px; /* Позиционируем таймер справа */
             display: flex;
             align-items: center;
             font-size: 24px;
@@ -61,7 +62,7 @@
         }
 
         .countdown {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
             color: black;
         }
@@ -155,7 +156,7 @@
 <body>
     <div class="gallery-container">
         <img src="https://i.postimg.cc/2y9NxdzJ/DALL-E-2025-02-10-17-31-04-A-three-panel-black-and-white-manga-style-comic-strip-The-first-panel.webp" alt="Фоновое изображение">
-        <!-- Таймер, прикрепленный к картинке снизу -->
+        <!-- Таймер теперь будет под картинкой справа -->
         <div class="countdown-wrapper">
             <div class="countdown-text">Continues in</div>
             <div class="countdown" id="countdown">00:00:00</div>
