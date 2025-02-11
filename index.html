@@ -15,48 +15,64 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             height: 100vh;
-            margin: 0;
+            width: 100vw;
             background-color: #f4f4f4;
             overflow: hidden;
             position: relative;
         }
 
         .gallery-container {
+            width: 100%;
+            height: auto;
             display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            justify-content: flex-start;
-            width: 80vw; /* Ограничиваем ширину галереи 60% от ширины экрана */
-            height: 40vh; /* Ограничиваем высоту галереи 60% от высоты экрана */
-            overflow: auto;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            scroll-snap-type: both mandatory;
-            scroll-behavior: smooth;
-            margin: auto; /* Центрируем галерею */
+            overflow: visible;
         }
 
         .gallery-container img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
         }
 
-        .gallery-container img:hover {
-            transform: scale(1.1);
+        .countdown-wrapper {
+            position: absolute;
+            bottom: -30px; /* Помещаем таймер сразу под картинку */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            z-index: 20;
+            opacity: 0.8;
+        }
+
+        .countdown-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            margin-right: 10px;
+        }
+
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
         }
 
         .social-icons {
             position: fixed;
-            top: 30px; /* Отступ 30px от верхнего края */
+            top: 20px;
             right: 20px;
             display: flex;
             gap: 10px;
-            opacity: 1;
-            z-index: 1;
-            flex-direction: column;
+            z-index: 10;
         }
 
         .social-icons a img {
@@ -70,11 +86,43 @@
             filter: grayscale(0%) contrast(200%) brightness(120%);
         }
 
+        .social-icons a.active img {
+            filter: grayscale(0%) contrast(200%) brightness(120%);
+        }
+
+        .coming-soon {
+            display: none;
+            font-size: 14px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .social-icons a.active .coming-soon {
+            display: inline-block;
+        }
+
+        .social-icons a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .social-icons a img + .coming-soon {
+            margin-left: 5px;
+        }
+
         @media (max-width: 768px) {
+            .countdown-text {
+                font-size: 16px;
+            }
+
+            .countdown {
+                font-size: 20px;
+            }
+
             .social-icons {
-                top: 30px; /* Отступ 30px от верхнего края */
-                right: 20px;
-                flex-direction: row;
                 gap: 8px;
             }
 
@@ -85,10 +133,15 @@
         }
 
         @media (max-width: 480px) {
+            .countdown-text {
+                font-size: 14px;
+            }
+
+            .countdown {
+                font-size: 18px;
+            }
+
             .social-icons {
-                top: 30px; /* Отступ 30px от верхнего края */
-                right: 20px;
-                flex-direction: row;
                 gap: 8px;
             }
 
@@ -97,50 +150,24 @@
                 height: 18px;
             }
         }
-
-            .zoom-container {
-        display: none;
-        position: fixed;
-        top: 10px; /* Отступ сверху */
-        left: 10px; /* Отступ слева */
-        width: calc(100% - 20px); /* Отнимаем 10px с каждой стороны */
-        height: calc(100% - 20px); /* Отнимаем 10px с каждой стороны */
-        background-color: rgba(0, 0, 0, 0); /* Сделаем фон полупрозрачным */
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        opacity: 0;
-        transition: opacity 0.8s ease-in-out;
-        padding: 10px; /* Отступы внутри контейнера */
-    }
-
-    .zoom-container.show {
-        display: flex;
-        opacity: 1;
-    }
-
-    .zoom-container img {
-        width: 100%;  /* Растягиваем изображение на всю ширину */
-        height: 50%; /* Растягиваем изображение на всю высоту */
-        object-fit: contain; /* Сохраняем пропорции изображения */
-        transform: scale(0);
-        transition: transform 0.8s ease-in-out;
-    }
-
-    .zoom-container.show img {
-        transform: scale(1);
-    }
     </style>
 </head>
 <body>
-    <div class="gallery-container" id="galleryContainer"></div>
-
-    <div class="zoom-container" id="zoomContainer" onclick="closeZoom(event)">
-        <img id="zoomImg" src="">
+    <div class="gallery-container">
+        <img src="https://i.postimg.cc/2y9NxdzJ/DALL-E-2025-02-10-17-31-04-A-three-panel-black-and-white-manga-style-comic-strip-The-first-panel.webp" alt="Фоновое изображение">
+        <!-- Таймер, прикрепленный к картинке снизу -->
+        <div class="countdown-wrapper">
+            <div class="countdown-text">Continues in</div>
+            <div class="countdown" id="countdown">00:00:00</div>
+        </div>
     </div>
 
+    <!-- Социальные иконки -->
     <div class="social-icons">
-        <a href="https://yourshop.com" target="_blank"><img src="https://img.icons8.com/?size=100&id=19411&format=png&color=000000" alt="Магазин"></a>
+        <a href="javascript:void(0);" onclick="showComingSoon(event)">
+            <img src="https://img.icons8.com/?size=100&id=19411&format=png&color=000000" alt="Магазин">
+            <div class="coming-soon">Coming Soon..</div>
+        </a>
         <a href="https://www.instagram.com/menklavvv" target="_blank"><img src="https://img.icons8.com/?size=100&id=85154&format=png&color=000000" alt="Instagram"></a>
         <a href="https://www.tiktok.com/@mene44ka" target="_blank"><img src="https://img.icons8.com/?size=100&id=soupkpLfTkZi&format=png&color=000000" alt="TikTok"></a>
         <a href="https://www.twitch.tv/m3nkaa" target="_blank"><img src="https://img.icons8.com/?size=100&id=G6PbeYzWv7Ne&format=png&color=000000" alt="Twitch"></a>
@@ -148,59 +175,46 @@
     </div>
 
     <script>
-        const images = [
-            { thumbnail: 
+        function updateCountdown() {
+            const now = new Date();
 
-"https://i.postimg.cc/65ZTyqSv/82c1c254-8535-4f51-a346-552a863347af.webp", 
+            const nowEST = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+            let targetDate = new Date(nowEST);
 
-gif: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjAzcmxpMGlpNXFrMjVlNnVienExYzJhdTl6NDR4bGhxZzd0amZiZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tHIRLHtNwxpjIFqPdV/giphy.gif" },
+            targetDate.setHours(22, 0, 0, 0); // 10 PM EST (22:00)
 
-        ];
+            if (nowEST >= targetDate) {
+                targetDate.setDate(targetDate.getDate() + 1);
+            }
 
-        const galleryContainer = document.getElementById('galleryContainer');
-        const zoomContainer = document.getElementById('zoomContainer');
-        const zoomImg = document.getElementById('zoomImg');
+            const timeDiff = targetDate - nowEST;
 
-        // Функция для более упорядоченного случайного позиционирования изображений
-        function randomizeImages() {
-            const containerWidth = galleryContainer.offsetWidth; // Ширина контейнера
-            const numOfImages = images.length; // Количество картинок
+            if (timeDiff > 0) {
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-            for (let i = 0; i < numOfImages; i++) {
-                const img = document.createElement('img');
-                img.src = images[i].thumbnail; // Миниатюра изображения
-                img.onclick = () => openZoom(images[i].gif); // При клике открывается соответствующий GIF
-
-                const randomY = Math.random() * (galleryContainer.offsetHeight - 100); // Отступ по оси Y
-                const randomX = Math.random() * (galleryContainer.offsetWidth - 100); // Отступ по оси X
-                img.style.marginTop = `${randomY}px`;
-                img.style.marginLeft = `${randomX}px`;
-
-                galleryContainer.appendChild(img);
+                document.getElementById("countdown").innerText = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            } else {
+                document.getElementById("countdown").innerText = "00:00:00";
             }
         }
 
-        // Открытие увеличенного GIF с анимацией
-        function openZoom(src) {
-            zoomImg.src = src;
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
 
-            // Добавляем задержку для плавности анимации при первом открытии
-            setTimeout(() => {
-                zoomContainer.classList.add('show');
-                setTimeout(() => zoomImg.style.transform = 'scale(1)', 50); // Плавное увеличение после отображения
-            }, 50); // Задержка перед открытием
+        function showComingSoon(event) {
+            event.preventDefault();
+            const icon = event.target.closest('a');
+            const message = icon.querySelector('.coming-soon');
+
+            icon.classList.add('active');
+
+            setTimeout(function() {
+                icon.classList.remove('active');
+            }, 2000);
         }
-
-        // Закрытие увеличенного изображения
-        function closeZoom(event) {
-            if (event.target === zoomContainer) {
-                zoomImg.style.transform = 'scale(0)'; // Плавное уменьшение
-                setTimeout(() => zoomContainer.classList.remove('show'), 500); // Закрыть контейнер после анимации
-            }
-        }
-
-        // Инициализация
-        randomizeImages();
     </script>
 </body>
 </html>
