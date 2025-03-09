@@ -34,9 +34,16 @@
         }
 
         .image-wrapper {
-            width: 80%;
-            text-align: center;
-        }
+    width: 70%;
+    text-align: center;
+}
+
+/* Поднять картинку только на десктопе */
+@media (min-width: 769px) {
+    .image-wrapper {
+        margin-top: -300px; /* Поднимаем картинку на ПК */
+    }
+}
 
         .image-wrapper a {
             display: block;
@@ -91,6 +98,7 @@
 .image-wrapper {
         width: 100vw;
         height: 100vh;
+
             }
 
             .social-icons a img {
