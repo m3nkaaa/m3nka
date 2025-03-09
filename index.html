@@ -39,7 +39,7 @@
 }
 
 /* Поднять картинку только на десктопе */
-@media (min-width: 769px) {
+@media (min-width: 950px) {
     .image-wrapper {
         margin-top: -15%; /* Поднимаем картинку на ПК */
     }
@@ -92,31 +92,33 @@
             filter: grayscale(0%) contrast(200%) brightness(120%);
         }
 
-        @media (max-width: 768px) {
-            .countdown-text, .countdown {
-                font-size: 18px;
-.image-wrapper {
+       @media (max-width: 950px) {
+    .countdown-text, .countdown {
+        font-size: 18px;
+    }
+
+    .image-wrapper {
         width: 100vw;
         height: 100vh;
+        margin-top: 80%; /* Поднимет картинку на 20% */
+    }
 
-            }
+    .social-icons a img {
+        width: 20px;
+        height: 20px;
+    }
+}
 
-            .social-icons a img {
-                width: 20px;
-                height: 20px;
-            }
-        }
+@media (max-width: 480px) {
+    .countdown-text, .countdown {
+        font-size: 14px;
+    }
 
-        @media (max-width: 480px) {
-            .countdown-text, .countdown {
-                font-size: 14px;
-            }
-
-            .social-icons a img {
-                width: 18px;
-                height: 18px;
-            }
-        }
+    .social-icons a img {
+        width: 18px;
+        height: 18px;
+    }
+}
     </style>
 </head>
 <body>
