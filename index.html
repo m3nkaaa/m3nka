@@ -18,63 +18,52 @@
             flex-direction: column;
             height: 100vh;
             width: 100vw;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             overflow: hidden;
             position: relative;
-            padding-bottom: 100px;
-            padding-top: 100px;
+            padding: 20px;
         }
 
         .gallery-container {
-            width: auto;
-            max-width: 800px;
-            height: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 800px;
             position: relative;
-            overflow: visible;
-            padding-bottom: 10px;
-            padding-top: 10px;
         }
 
         .image-wrapper {
-            width: 100%;
-            position: relative;
+            width: 70%;
             text-align: center;
-            
         }
 
-        .gallery-container img {
-            width: 85%;
-            height: 100%;
+        .image-wrapper a {
+            display: block;
+            width: 100%;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
             object-fit: contain;
-            
         }
 
-        .countdown-wrapper {
-            margin-top: 20px; /* Таймер будет находиться под картинкой */
+      /*  .countdown-wrapper {
+            margin-top: 20px;
             display: flex;
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
             color: black;
-            z-index: 20;
             opacity: 0.8;
         }
 
-        .countdown-text {
+        .countdown-text, .countdown {
             font-size: 24px;
             font-weight: bold;
-            color: black;
-            margin-right: 10px;
-        }
-
-        .countdown {
-            font-size: 24px;
-            font-weight: bold;
-            color: black;
-        }
+        }*/
 
         .social-icons {
             position: fixed;
@@ -96,44 +85,9 @@
             filter: grayscale(0%) contrast(200%) brightness(120%);
         }
 
-        .social-icons a.active img {
-            filter: grayscale(0%) contrast(200%) brightness(120%);
-        }
-
-        .coming-soon {
-            display: none;
-            font-size: 14px;
-            color: #ff0000;
-            font-weight: bold;
-        }
-
-        .social-icons a.active .coming-soon {
-            display: inline-block;
-        }
-
-        .social-icons a {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-
-        .social-icons a img + .coming-soon {
-            margin-left: 5px;
-        }
-
         @media (max-width: 768px) {
-            .countdown-text {
+            .countdown-text, .countdown {
                 font-size: 18px;
-            }
-
-            .countdown {
-                font-size: 15px;
-            }
-
-            .social-icons {
-                gap: 10px;
             }
 
             .social-icons a img {
@@ -143,16 +97,8 @@
         }
 
         @media (max-width: 480px) {
-            .countdown-text {
+            .countdown-text, .countdown {
                 font-size: 14px;
-            }
-
-            .countdown {
-                font-size: 15px;
-            }
-
-            .social-icons {
-                gap: 8px;
             }
 
             .social-icons a img {
@@ -165,19 +111,19 @@
 <body>
     <div class="gallery-container">
         <div class="image-wrapper">
-            <img src="https://i.postimg.cc/2y9NxdzJ/DALL-E-2025-02-10-17-31-04-A-three-panel-black-and-white-manga-style-comic-strip-The-first-panel.webp" alt="Фоновое изображение">
-        </div>
-        <!-- Таймер теперь расположен под картинкой -->
+            <a href="https://app.ston.fi/swap?chartVisible=false&clckid=88127190&ft=EQAfBxFiC5aDQW1vUNUJEmqMbKi1vHrgmrb9HxyeRsLaQnQq&tt=EQDz4YOi2Mnzdqca0ZCprrcIm5K16UvM_OPiB4HWJ5KMVie3" target="_blank">
+                <img src=https://i.postimg.cc/mZN31twg/Screenshot-2025-03-09-013836.jpg" alt="Фоновое изображение">
+            </a>
+       <!-- </div>
         <div class="countdown-wrapper">
             <div class="countdown-text">Continues in</div>
             <div class="countdown" id="countdown">00:00:00</div>
         </div>
-    </div>
+    </div> -->
 
     <div class="social-icons">
-        <a href="javascript:void(0);" onclick="showComingSoon(event)">
+        <a href="javascript:void(0);" onclick="alert('Coming Soon..')">
             <img src="https://img.icons8.com/?size=100&id=19411&format=png&color=000000" alt="Магазин">
-            <div class="coming-soon">Coming Soon..</div>
         </a>
         <a href="https://www.instagram.com/menklavvv" target="_blank"><img src="https://img.icons8.com/?size=100&id=85154&format=png&color=000000" alt="Instagram"></a>
         <a href="https://www.tiktok.com/@mene44ka" target="_blank"><img src="https://img.icons8.com/?size=100&id=soupkpLfTkZi&format=png&color=000000" alt="TikTok"></a>
@@ -186,13 +132,11 @@
     </div>
 
     <script>
-        function updateCountdown() {
+      /*  function updateCountdown() {
             const now = new Date();
-
             const nowEST = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
             let targetDate = new Date(nowEST);
-
-            targetDate.setHours(22, 0, 0, 0); // 10 PM EST (22:00)
+            targetDate.setHours(22, 0, 0, 0);
 
             if (nowEST >= targetDate) {
                 targetDate.setDate(targetDate.getDate() + 1);
@@ -213,19 +157,7 @@
         }
 
         setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        function showComingSoon(event) {
-            event.preventDefault();
-            const icon = event.target.closest('a');
-            const message = icon.querySelector('.coming-soon');
-
-            icon.classList.add('active');
-
-            setTimeout(function() {
-                icon.classList.remove('active');
-            }, 2000);
-        }
+        updateCountdown();  */
     </script>
 </body>
 </html>
